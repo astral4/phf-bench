@@ -9,6 +9,16 @@ repository = "https://github.com/astral4/phf-benchmark"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
+divan = { version = "0.1.14", default-features = false }
+phf = "0.11.2"
+phf_codegen = "0.11.2"
+rand = "0.8.5"
+rand_xoshiro = "0.6.0"
+
+[build-dependencies]
+phf_codegen = "0.11.2"
+rand = "0.8.5"
+rand_xoshiro = "0.6.0"
 
 [lints.rust]
 async_fn_in_trait = "allow"
@@ -36,3 +46,13 @@ unused_qualifications = "deny"
 [lints.clippy]
 module_name_repetitions = { level = "allow", priority = 1 }
 pedantic = "warn"
+
+[profile.bench]
+strip = true
+lto = true
+panic = "abort"
+codegen-units = 1
+
+[[bench]]
+name = "phf"
+harness = false
