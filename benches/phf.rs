@@ -1,6 +1,6 @@
 use core::iter::zip;
 use divan::Bencher;
-use phf_benchmark::{PHF_MAP, SEED};
+use phf_benchmark::{phf::PHF_MAP, SEED};
 use phf_codegen::Map;
 use rand::distributions::Standard;
 use rand::{Rng, SeedableRng};
