@@ -9,7 +9,9 @@ repository = "https://github.com/astral4/phf-benchmark"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
+ahash = "0.8.11"
 phf = "0.11.2"
+ptr_hash = { git = "https://github.com/RagnarGrootKoerkamp/PTRHash.git", rev = "727afbe0afa6939c756f89eb782de8c683e583fa" }
 
 [dev-dependencies]
 divan = { version = "0.1.14", default-features = false }
@@ -57,4 +59,8 @@ codegen-units = 1
 
 [[bench]]
 name = "phf"
+harness = false
+
+[[bench]]
+name = "ptrhash"
 harness = false
