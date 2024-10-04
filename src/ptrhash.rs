@@ -41,7 +41,7 @@ impl<K: KeyT, V> PtrHashMap<K, V> {
 
     /// # Panics
     /// This function may panic if `key` was not present during the construction of this instance of `PtrHashMap`.
-    pub fn get_entry(&self, key: &K) -> &V
+    pub fn get(&self, key: &K) -> &V
     where
         K: PartialEq,
     {

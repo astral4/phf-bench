@@ -51,6 +51,6 @@ fn query(bencher: Bencher<'_, '_>) {
             (PtrHashMap::new(&keys, values), key)
         })
         .bench_refs(|(map, key)| {
-            map.get_entry(key);
+            map.get(key);
         });
 }
