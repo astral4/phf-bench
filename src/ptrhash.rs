@@ -19,37 +19,33 @@ impl<T: Hash> Hasher<T> for InnerHasher {
 #[allow(missing_debug_implementations)]
 pub struct PtrHashMap<K: KeyT, V> {
     hasher: PtrHash<K, EliasFano, InnerHasher>,
-    entries: Vec<(K, V)>,
+    values: Vec<V>,
 }
 
 impl<K: KeyT, V> PtrHashMap<K, V> {
     /// # Panics
     /// Panics if `keys.len() != values.len()`.
     #[must_use]
-    pub fn new(keys: Vec<K>, values: Vec<V>) -> Self {
+    pub fn new(keys: &[K], values: Vec<V>) -> Self {
         assert_eq!(keys.len(), values.len());
 
         let hasher: PtrHash<_, EliasFano, InnerHasher> =
-            PtrHash::new(&keys, PtrHashParams::default());
+            PtrHash::new(keys, PtrHashParams::default());
 
         let mut entries: Vec<_> = zip(keys, values).collect();
-
         entries.sort_by_cached_key(|(k, _)| hasher.index_minimal(k));
+        let values = entries.into_iter().map(|(_, v)| v).collect();
 
-        Self { hasher, entries }
+        Self { hasher, values }
     }
 
-    pub fn get_entry(&self, key: &K) -> Option<(&K, &V)>
+    /// # Panics
+    /// This function may panic if `key` was not present during the construction of this instance of `PtrHashMap`.
+    pub fn get_entry(&self, key: &K) -> &V
     where
         K: PartialEq,
     {
         let index = self.hasher.index_minimal(key);
-        let entry = &self.entries[index];
-
-        if entry.0 == *key {
-            Some((&entry.0, &entry.1))
-        } else {
-            None
-        }
+        &self.values[index]
     }
 }

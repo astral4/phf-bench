@@ -25,7 +25,7 @@ fn build(bencher: Bencher<'_, '_>) {
 
             (keys, values)
         })
-        .bench_values(|(keys, values)| PtrHashMap::new(keys, values));
+        .bench_values(|(keys, values)| PtrHashMap::new(&keys, values));
 }
 
 #[divan::bench]
@@ -42,13 +42,13 @@ fn query(bencher: Bencher<'_, '_>) {
                 .take(1000)
                 .collect::<Vec<_>>();
 
-            // `ptr_hash::PtrHash::index_minimal(key)` panics
+            // `ptr_hash::PtrHash::index_minimal(key)` may panic
             // if `key` was not present during the construction of `PtrHash`.
             // So, we have to pick a key that was used in the PHF construction.
             let mut rng = rand::thread_rng();
             let key = *keys.choose(&mut rng).unwrap();
 
-            (PtrHashMap::new(keys, values), key)
+            (PtrHashMap::new(&keys, values), key)
         })
         .bench_refs(|(map, key)| {
             map.get_entry(key);
